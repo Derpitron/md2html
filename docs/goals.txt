@@ -1,0 +1,7 @@
+1. parse h1, h2, h3, etc
+2. parse bold, italic
+3. parse bold+italic
+4. parse nested bold/italic/bolditalic in h1, h2, h3
+5. parse linebreak
+
+just make it in lexer+parser format for now
