@@ -20,7 +20,7 @@ typedef struct {
 	// s would just be "**" the string literal itself.
 	token t;
 	char s[];
-} scanartifact;
+} artifact;
 
 //utility struct intended to help make lexing easier between functions
 typedef struct {
@@ -31,24 +31,24 @@ typedef struct {
 //This function's ultimate job is to return a list of tokens for a single line, as well as it's accompanying text
 //input "# hello *world*\n"
 //output {{HASH, "#"}, {TXT, " hello "}, {STAR, "*"}, {TXT, "world"}, {STAR, "*"}, {NEWLINE, "\n"}}
-void lexLine(char srctext[], int len, scanartifact artifacts[]) {
-	//TODO: replace scanartifact list with a stack for easy use
+void lexLine(char srctext[], int len, artifact artifacts[]) {
+	//TODO: replace artifact list with a stack for easy use?
 	int index = -1;
 	int tokenIndex = 0;
 	
 	while { //word level lex-loop
-		scanartifact artifact;
+		artifact artifact;
 		index++;
 
 		if (index >= len) {
-				artifact = {EOF, ""}; //TODO: We want to append this to artifact array, not return here
+				artifact = {EOF, ""}; //TODO: what does the break; statement do here
 				break;
 		}
 		
 		char currentCharacter = srctext[index];
 		//I don't think we need a isLetter or isSpace checker --1
 		if (currentCharacter == '\0') {//EOF
-			artifact = {EOF, ""}; //TODO: We want to append this to artifact array, not return here
+			artifact = {EOF, ""}; //TODO: what does the break; statement do here
 			break;
 		}
 
@@ -62,14 +62,14 @@ void lexLine(char srctext[], int len, scanartifact artifacts[]) {
 			index++;
 
 			if (index >= len) {
-				artifact = {EOF, buf}; //TODO: We want to append this to artifact array, not return here
+				artifact = {EOF, buf}; //TODO: what does the break; statement do here
 				break;
 			}
 			
 			currentCharacter = srctext[index];
 			//I don't think we need a isLetter or isSpace checker
 			if (currentCharacter == '\0') {//EOF
-				artifact = {EOF, ""}; //TODO: We want to append this to artifact array, not return here
+				artifact = {EOF, ""}; //TODO: what does the break; statement do here
 				break;
 			} else if (currentCharacter == '#') {
 				while (currentCharacter == '#') { //for header levels h1, h2, etc
@@ -77,13 +77,13 @@ void lexLine(char srctext[], int len, scanartifact artifacts[]) {
 					index++;
 					currentCharacter = srctext[index];
 				} //finished parsing header, now we ignore any more header characters in the rest of the line
-				artifact = {HASH, buf}; //TODO: buf is still {'#', '#', '#', '\0', '','', etc etc for 250 something more bytes. this is too big}
+				artifact = {HASH, buf}; //TODO: buf is still {'#', '#', '#', '\0', '',...,''} etc etc for 250 something more bytes. this is too big
 			}
 			buf[bufIndex] = currentCharacter;
 			bufIndex++;
 		}
 
-		artifacts[tokenIndex] = artifact; //Push the artifact to the artifact list
+		artifacts[tokenIndex] = artifact; //Append the artifact to the artifact list
 		tokenIndex++;
 	}
 
@@ -94,7 +94,7 @@ void lexLine(char srctext[], int len, scanartifact artifacts[]) {
 
 int main() {
 	char example[] = "# hello *world*";
-	scanartifact artifacts[64]; //sus
+	artifact artifacts[64]; //sus
 	parseLine(example, sizeof(example)/sizeof(char));
 	return 0;
 }
