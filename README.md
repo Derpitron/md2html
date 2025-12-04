@@ -1,3 +1,5 @@
+Archived. I made this to understand and implement Finite State Machines from my Digital System Design course. It works, for a very basic single `#` symbol but I didn't do anything beyond that.
+
 # md2html
 It's a simple wip markdown to html generator which I'm making to learn how parsers and lexers work, Made for fun, very work in progress and unstable.
 
